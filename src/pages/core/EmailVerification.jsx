@@ -1,31 +1,52 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"; // Import useParams hook
+import { useParams, Link } from "react-router-dom"; // Import Link
 
 const EmailVerification = () => {
-  const { userId } = useParams(); // Get userId from URL parameters
+  const { userId } = useParams();
   const [message, setMessage] = useState("");
+  const [isVerified, setIsVerified] = useState(false); // Track if verification was successful
 
   useEffect(() => {
+    const abortController = new AbortController();
+    const { signal } = abortController;
+
     const verifyEmail = async () => {
       try {
         const response = await fetch(
-          `https://rent-review-backend.onrender.com/api/verify-email/${userId}`,
+          `http://localhost:5000/api/verify-email/${userId}`,
+          { signal },
         );
         const data = await response.json();
         setMessage(data.message);
+
+        if (response.ok) {
+          setIsVerified(true); // Mark verification as successful
+        }
       } catch (error) {
-        setMessage("Verification failed. Please try again.");
+        if (error.name !== "AbortError") {
+          setMessage("Verification failed. Please try again.");
+        }
       }
     };
 
     if (userId) {
       verifyEmail();
     }
+
+    return () => {
+      abortController.abort();
+    };
   }, [userId]);
 
   return (
     <div>
       <h1>{message}</h1>
+      {isVerified && (
+        <p>
+          <Link to="/signin">Click here to log in</Link>{" "}
+          {/* Link to login page */}
+        </p>
+      )}
     </div>
   );
 };
