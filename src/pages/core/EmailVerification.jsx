@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom"; // Import Link
+import { API_BASE_URL } from "../../config";
 
 const EmailVerification = () => {
   const { userId } = useParams();
@@ -12,10 +13,9 @@ const EmailVerification = () => {
 
     const verifyEmail = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:5000/api/verify-email/${userId}`,
-          { signal },
-        );
+        const response = await fetch(`${API_BASE_URL}/verify-email/${userId}`, {
+          signal,
+        });
         const data = await response.json();
         setMessage(data.message);
 
