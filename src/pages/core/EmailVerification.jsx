@@ -39,14 +39,39 @@ const EmailVerification = () => {
   }, [userId]);
 
   return (
-    <div>
-      <h1>{message}</h1>
-      {isVerified && (
-        <p>
-          <Link to="/signin">Click here to log in</Link>{" "}
-          {/* Link to login page */}
-        </p>
-      )}
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+      <div className="max-w-md rounded-2xl bg-white p-8 text-center shadow-lg">
+        <div className="flex flex-col items-center">
+          <svg
+            className="mb-4 h-16 w-16 text-green-500"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M5 13l4 4L19 7"
+            ></path>
+          </svg>
+          <h1 className="text-2xl font-semibold text-gray-800">{message}</h1>
+          {isVerified && (
+            <p className="mt-4 text-gray-600">
+              Your email has been successfully verified!
+            </p>
+          )}
+          {isVerified && (
+            <Link
+              to="/signin"
+              className="mt-6 inline-block rounded-lg bg-blue-600 px-6 py-2 font-medium text-white transition duration-300 hover:bg-blue-700"
+            >
+              Log in to your account
+            </Link>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

@@ -3,8 +3,12 @@ import { isAuthenticated } from "../../services/auth/requests";
 import { createProperty } from "../../services/core/properties";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
+import { useLoading } from "../../components/LoadingContext";
+import LoadingSpinner from "../../components/Spinner";
 
 const AddProperty = () => {
+  const { load, showLoading, hideLoading } = useLoading();
+
   const [values, setValues] = useState({
     address: "",
     city: "",
@@ -23,7 +27,7 @@ const AddProperty = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    showLoading();
     try {
       const response = await createProperty({ address, city }, user._id, token);
 
@@ -44,8 +48,14 @@ const AddProperty = () => {
         error: "An unexpected error has occurred. Please try again",
       });
       console.log(error);
+    } finally {
+      hideLoading();
     }
   };
+
+  if (load) {
+    return <LoadingSpinner />; // Show spinner while loading
+  }
 
   return (
     <>
